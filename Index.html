@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08060e">
+<title>ZYVEX — Beyond the Known</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #08060e;
+  --panel: #120d1c;
+  --purple: #a855f7;
+  --light: #d8b4fe;
+  --text: #f7f2ff;
+  --muted: #a49ab5;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: #7c3aed;
+  filter: blur(140px);
+  opacity: .18;
+  top: 10%;
+  left: 20%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #241a33;
+  position: sticky;
+  top: 0;
+  background: #08060ee8;
+  backdrop-filter: blur(12px);
+  z-index: 5;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--light);
+  text-shadow: 0 0 18px #a855f766;
+}
+
+button {
+  background: linear-gradient(135deg, #9333ea, #6d28d9);
+  color: white;
+  border: 1px solid #b879ff55;
+  padding: 12px 17px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: .25s;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+button:hover {
+  box-shadow: 0 0 20px #9333ea55;
+}
+
+.ghost {
+  background: #ffffff08;
+  border: 1px solid #a855f766;
+}
+
+main {
+  width: min(100% - 32px, 900px);
+  margin: auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 85px 0 60px;
+  animation: appear 1s ease both;
+}
+
+.tag {
+  color: var(--light);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-size: clamp(44px, 12vw, 82px);
+  letter-spacing: 5px;
+  line-height: 1.1;
+  background: linear-gradient(90deg, #fff, #c084fc, #8b5cf6);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  color: var(--muted);
+  margin: 20px auto;
+  line-height: 1.8;
+  max-width: 430px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.section-title {
+  font-size: 23px;
+  margin-bottom: 8px;
+}
+
+.sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 22px;
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 45px;
+}
+
+.card {
+  background: linear-gradient(145deg, #181024, #0d0a14);
+  border: 1px solid #39244e;
+  padding: 20px;
+  border-radius: 16px;
+  min-width: 0;
+  transition: .3s;
+}
+
+.card:hover {
+  border-color: #a855f7;
+  transform: translateY(-3px);
+}
+
+.card .symbol {
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 9px;
+}
+
+.card p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 17px;
+}
+
+.card button {
+  width: 100%;
+  font-size: 12px;
+  padding: 11px 5px;
+}
+
+footer {
+  text-align: center;
+  border-top: 1px solid #241a33;
+  padding: 28px 15px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 2;
+}
+
+.screen {
+  display: none;
+  padding: 35px 0 55px;
+  animation: appear .35s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+.field {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: #0b0811;
+  border: 1px solid #49305d;
+  color: white;
+  outline: none;
+  margin: 8px 0 15px;
+}
+
+.field:focus {
+  border-color: var(--purple);
+}
+
+label {
+  font-size: 13px;
+  color: var(--light);
+}
+
+.form-box {
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--panel);
+  padding: 24px;
+  border: 1px solid #39244e;
+  border-radius: 18px;
+}
+
+.form-box button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 16px;
+}
+
+.result {
+  color: var(--light);
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 15px;
+  overflow-wrap: anywhere;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .grid { gap: 10px; }
+  .card { padding: 14px; }
+  .hero { padding-top: 65px; }
+  header { padding: 16px; }
+  .logo { font-size: 21px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">ZYVEX</div>
+  <button onclick="openScreen('login')">Sign In ↗</button>
+</header>
+
+<main>
+  <section id="home" class="screen active">
+    <div class="hero">
+      <div class="tag">WELCOME TO YOUR UNIVERSE</div>
+      <h1>ZYVEX</h1>
+      <p>Beyond the Known.<br>
+      Explore ideas. Create something different.<br>
+      Your digital world starts here.</p>
+      <div class="actions">
+        <button onclick="openScreen('signup')">Get Started ↗</button>
+        <button class="ghost" onclick="openScreen('tools')">Explore Tools</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Explore Your Space</h2>
+    <p class="sub">A new world of creativity, built by you.</p>
+
+    <div class="grid">
+      <article class="card">
+        <div class="symbol">◈</div>
+        <h3>Your Profile</h3>
+        <p>Your personal digital identity.</p>
+        <button onclick="openScreen('profile')">Open Profile</button>
+      </article>
+
+      <article class="card">
+        <div class="symbol">⌘</div>
+        <h3>Creative Tools</h3>
+        <p>Discover useful mini tools.</p>
+        <button onclick="openScreen('tools')">Explore Tools</button>
+      </article>
+
+      <article class="card">
+        <div class="symbol">✧</div>
+        <h3>Your Projects</h3>
+        <p>Ideas waiting to come alive.</p>
+        <button onclick="openScreen('projects')">View Projects</button>
+      </article>
+
+      <article class="card">
+        <div class="symbol">⛨</div>
+        <h3>Admin Space</h3>
+        <p>Reserved for the authorized owner.</p>
+        <button onclick="openScreen('admin')">Admin Access</button>
+      </article>
+    </div>
+  </section>
+
+  <section id="login" class="screen">
+    <div class="form-box">
+      <h2>Welcome Back</h2>
+      <p class="sub">Sign in to your ZYVEX account.</p>
+      <form onsubmit="demoAuth(event, 'login')">
+        <label>Email Address</label>
+        <input class="field" type="email" required
+          placeholder="you@example.com">
+        <label>Password</label>
+        <input class="field" type="password" required
+          placeholder="Your password">
+        <button type="submit">Sign In</button>
+      </form>
+      <p class="notice">New here? Create an account instead.</p>
+      <button class="ghost" onclick="openScreen('signup')">Create Account</button>
+      <div id="loginResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="signup" class="screen">
+    <div class="form-box">
+      <h2>Create Account</h2>
+      <p class="sub">Join the ZYVEX universe.</p>
+      <form onsubmit="demoAuth(event, 'signup')">
+        <label>Display Name</label>
+        <input class="field" required maxlength="40"
+          placeholder="Choose a username">
+        <label>Email Address</label>
+        <input class="field" type="email" required
+          placeholder="you@example.com">
+        <label>Password</label>
+        <input class="field" type="password" minlength="8"
+          required placeholder="At least 8 characters">
+        <button type="submit">Create Account</button>
+      </form>
+      <div id="signupResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="profile" class="screen">
+    <h2 class="section-title">Your Profile</h2>
+    <p class="sub">Your personal space in ZYVEX.</p>
+    <div class="card">
+      <div class="symbol">◉</div>
+      <h3 id="profileName">Guest Member</h3>
+      <p id="profileEmail">Demo preview — no account connected.</p>
+      <button onclick="openScreen('login')">Sign In</button>
+    </div>
+  </section>
+
+  <section id="tools" class="screen">
+    <h2 class="section-title">Creative Tools</h2>
+    <p class="sub">Useful little tools for your everyday creativity.</p>
+
+    <div class="card">
+      <h3>✧ Bio Generator</h3>
+      <p>Create a random aesthetic bio idea.</p>
+      <button onclick="makeBio()">Generate Bio</button>
+      <div id="bioResult" class="result"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>⌘ Text Styler</h3>
+      <p>Turn your text into uppercase lettering.</p>
+      <input class="field" id="styleInput"
+        placeholder="Type something here">
+      <button onclick="styleText()">Transform Text</button>
+      <div id="styleResult" class="result"></div>
+      <button class="ghost" onclick="copyStyled()">Copy Result</button>
+    </div>
+  </section>
+
+  <section id="projects" class="screen">
+    <h2 class="section-title">Your Projects</h2>
+    <p class="sub">Your creative journey begins with one idea.</p>
+    <div class="card">
+      <div class="symbol">✧</div>
+      <h3>First Project</h3>
+      <p>ZYVEX is your first digital creation. More projects can be added here.</p>
+    </div>
+  </section>
+
+  <section id="admin" class="screen">
+    <div class="form-box">
+      <h2>Admin Space</h2>
+      <p class="sub">This is a visual preview, not a secured admin panel.</p>
+      <div class="card">
+        <h3>Owner Dashboard</h3>
+        <p>Authentication: Not connected<br>
+        User database: Not connected<br>
+        Admin permissions: Not configured</p>
+      </div>
+      <p class="notice">Real admin access must be verified by a secure backend. This demo does not grant admin privileges.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="logo">ZYVEX</div>
+  <p>BEYOND THE KNOWN</p>
+  <p>Created with curiosity. © 2026 ZYVEX</p>
+</footer>
+
+<script>
+function openScreen(id) {
+  document.querySelectorAll('.screen').forEach(section => {
+    section.classList.remove('active');
+  });
+
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function demoAuth(event, type) {
+  event.preventDefault();
+
+  const output = document.getElementById(
+    type === 'login' ? 'loginResult' : 'signupResult'
+  );
+
+  output.textContent =
+    'Demo only: real account authentication is not connected yet. ' +
+    'Do not enter a real password in this preview.';
+}
+
+const bios = [
+  'Beyond the ordinary. ✦',
+  'Quiet mind. Infinite ideas.',
+  'Creating my own universe.',
+  'Unknown path. Unique destination.',
+  'Less noise. More meaning.'
+];
+
+function makeBio() {
+  const choice = bios[Math.floor(Math.random() * bios.length)];
+  document.getElementById('bioResult').textContent = choice;
+}
+
+function styleText() {
+  const value = document.getElementById('styleInput').value.trim();
+  document.getElementById('styleResult').textContent =
+    value ? value.toUpperCase() : 'Write something first.';
+}
+
+function copyStyled() {
+  const value = document.getElementById('styleResult').textContent;
+
+  if (!value || value === 'Write something first.') return;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(value)
+      .then(() => alert('Copied!'))
+      .catch(() => alert('Please select and copy the text.'));
+  } else {
+    alert('Select the result text and copy it manually.');
+  }
+}
+</script>
+</body>
+</html>
